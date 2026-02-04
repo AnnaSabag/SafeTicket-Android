@@ -39,16 +39,15 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         Ticket ticket = ticketList.get(position);
 
-        // Set data to views
         holder.tvEventName.setText(ticket.getEventName());
-        holder.tvLocation.setText(ticket.getLocation());
         holder.tvLocation.setText(ticket.getLocation() + ", " + ticket.getCountry());
-        holder.tvPrice.setText(ticket.getPrice());
+
+        // Fix: Convert double price to String with currency symbol
+        holder.tvPrice.setText(ticket.getAskingPrice() + " ₪");
+
         holder.ivTicketImage.setImageResource(ticket.getEventImage());
 
-        // Handle item click: trigger the listener
         holder.itemView.setOnClickListener(v -> listener.onItemClick(ticket));
-
     }
 
     @Override

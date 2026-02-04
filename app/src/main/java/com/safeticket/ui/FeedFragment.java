@@ -45,24 +45,40 @@ public class FeedFragment extends Fragment {
 
         createDummyData();
 
-        // --- Add Listener here ---
+        // 1. Handle "Add Ticket" Result
         getParentFragmentManager().setFragmentResultListener("add_ticket_request", this, (requestKey, result) -> {
-            // Get data from the AddTicketFragment
             String name = result.getString("name");
-            String price = result.getString("price");
+            String priceStr = result.getString("price");
             String location = result.getString("location");
             String country = result.getString("country");
 
-            // Create new ticket and add to list
-            // (Currently using default image and static seller info until we progress)
-            Ticket newTicket = new Ticket(name, location, country, price, R.drawable.ic_launcher_background, "Me", "050-0000000");
+            double priceValue = 0.0;
+            try {
+                priceValue = Double.parseDouble(priceStr.replace(" ₪", ""));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            ticketList.add(0, newTicket); // Add to the top of the list
-            adapter.notifyItemInserted(0); // Update the display
-            rvTicketList.scrollToPosition(0); // Scroll up to the new ticket
+            Ticket newTicket = new Ticket(
+                    "999", "me", name, location, country,
+                    System.currentTimeMillis(), priceValue, priceValue,
+                    "General", R.drawable.ic_launcher_background, "Me", "050-0000000"
+            );
+
+            ticketList.add(0, newTicket);
+            adapter.notifyItemInserted(0);
+            rvTicketList.scrollToPosition(0);
         });
 
-        // Initialize Adapter with the Click Listener
+        // 2. Handle Profile Click
+        view.findViewById(R.id.ivProfileButton).setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.main_container, new ProfileFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // 3. Initialize Adapter
         adapter = new TicketAdapter(ticketList, new TicketAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Ticket ticket) {
@@ -70,7 +86,7 @@ public class FeedFragment extends Fragment {
 
                 Bundle args = new Bundle();
                 args.putString(TicketDetailsFragment.ARG_NAME, ticket.getEventName());
-                args.putString(TicketDetailsFragment.ARG_PRICE, ticket.getPrice());
+                args.putString(TicketDetailsFragment.ARG_PRICE, String.valueOf(ticket.getAskingPrice()) + " ₪");
                 args.putString(TicketDetailsFragment.ARG_LOCATION, ticket.getLocation());
                 args.putString(TicketDetailsFragment.ARG_COUNTRY, ticket.getCountry());
                 args.putString(TicketDetailsFragment.ARG_SELLER, ticket.getSellerName());
@@ -85,20 +101,9 @@ public class FeedFragment extends Fragment {
             }
         });
 
+        // 4. Set Adapter & FAB
         rvTicketList.setAdapter(adapter);
 
-        // Handle Floating Action Button (FAB) Click
-        view.findViewById(R.id.fabAddTicket).setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_container, new AddTicketFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        // Set the adapter to the RecyclerView
-        rvTicketList.setAdapter(adapter);
-
-        // Handle Floating Action Button (FAB) Click
         view.findViewById(R.id.fabAddTicket).setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.main_container, new AddTicketFragment())
@@ -110,16 +115,12 @@ public class FeedFragment extends Fragment {
     private void createDummyData() {
         ticketList = new ArrayList<>();
 
-        // Coldplay -> img_coldplay
-        ticketList.add(new Ticket("Coldplay Live", "Park Hayarkon, TLV", "Israel", "450 ₪", R.drawable.img_coldplay, "David Cohen", "050-1234567"));
+        // Updated Constructor usage:
+        // ID, SellerID, Name, Location, Country, Date, AskingPrice, OriginalPrice, Category, Image, SellerName, Phone
 
-        // Football -> img_football
-        ticketList.add(new Ticket("Football Match", "Bloomfield Stadium", "Israel", "120 ₪", R.drawable.img_football, "Yossi Levi", "052-9876543"));
-
-        // Omer Adam -> img_omeradam
-        ticketList.add(new Ticket("Omer Adam", "Menora Mivtachim", "Israel", "300 ₪", R.drawable.img_omeradam, "Dana Ron", "054-5555555"));
-
-        // Cinema -> img_cinema
-        ticketList.add(new Ticket("Cinema City VIP", "Glilot", "Israel", "80 ₪", R.drawable.img_cinema, "Roni Alon", "053-1112223"));
+        ticketList.add(new Ticket("101", "s1", "Coldplay Live", "Park Hayarkon, TLV", "Israel", System.currentTimeMillis(), 450.0, 600.0, "Concert", R.drawable.img_coldplay, "David Cohen", "050-1234567"));
+        ticketList.add(new Ticket("102", "s2", "Football Match", "Bloomfield Stadium", "Israel", System.currentTimeMillis(), 120.0, 200.0, "Sport", R.drawable.img_football, "Yossi Levi", "052-9876543"));
+        ticketList.add(new Ticket("103", "s3", "Omer Adam", "Menora Mivtachim", "Israel", System.currentTimeMillis(), 300.0, 450.0, "Concert", R.drawable.img_omeradam, "Dana Ron", "054-5555555"));
+        ticketList.add(new Ticket("104", "s4", "Cinema City VIP", "Glilot", "Israel", System.currentTimeMillis(), 80.0, 150.0, "Movie", R.drawable.img_cinema, "Roni Alon", "053-1112223"));
     }
 }
