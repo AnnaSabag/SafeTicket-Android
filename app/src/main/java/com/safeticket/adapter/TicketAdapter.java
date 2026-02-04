@@ -68,4 +68,10 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
             ivTicketImage = itemView.findViewById(R.id.ivTicketImage);
         }
     }
+
+    // Method to update the list dynamically when searching/filtering
+    public void setFilteredList(java.util.List<Ticket> filteredList) {
+        this.ticketList = filteredList;
+        notifyDataSetChanged();
+    }
 }

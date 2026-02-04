@@ -23,7 +23,7 @@
         android:text="Israel Israeli"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/black"/>
+        android:textColor="@android:color/black"/>
 
     <TextView
         android:id="@+id/tvProfileEmail"
@@ -66,6 +66,7 @@
         android:layout_marginVertical="32dp"/>
 
     <TextView
+        android:id="@+id/tvProfilePhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Phone: 050-1234567"
@@ -77,5 +78,13 @@
         android:layout_height="wrap_content"
         android:text="Member since: 2024"
         android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btnEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:backgroundTint="#009688"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>
