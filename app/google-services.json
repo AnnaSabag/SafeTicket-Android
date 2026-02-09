@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "101089248685",
+    "project_id": "safeticketproject",
+    "storage_bucket": "safeticketproject.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101089248685:android:7163ad6aed492dd7824d24",
+        "android_client_info": {
+          "package_name": "com.safeticket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFvW-KOMp5HqCA_W7crmaWxkS51o2r2H8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
