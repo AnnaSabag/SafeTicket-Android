@@ -17,8 +17,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.safeticket.R;
 import com.safeticket.adapter.TicketAdapter;
 import com.safeticket.model.Ticket;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FeedFragment extends Fragment {
 
@@ -27,7 +33,7 @@ public class FeedFragment extends Fragment {
     private List<Ticket> ticketList;
     private FirebaseFirestore db;
     private SearchView searchView;
-    private String currentCategory = "All";
+    private String currentCategory = "הכל";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +57,6 @@ public class FeedFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) { return false; }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 filterList(newText);
@@ -80,58 +85,77 @@ public class FeedFragment extends Fragment {
         db.collection("tickets").get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 ticketList.clear();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0); cal.set(Calendar.MILLISECOND, 0);
+                Date today = cal.getTime();
+
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     try {
                         Ticket ticket = document.toObject(Ticket.class);
-                        ticket.setTicketId(document.getId());
-                        ticketList.add(ticket);
+                        if (ticket != null) {
+                            ticket.setTicketId(document.getId());
+
+                            Date eventDate = sdf.parse(ticket.getEventDate());
+                            // סינון: רק אם התאריך רלוונטי וגם הכרטיס לא נמכר
+                            if (eventDate != null && !eventDate.before(today) && !ticket.isSold()) {
+                                ticketList.add(ticket);
+                            }
+                        }
                     } catch (Exception e) {
-                        Log.e("FirestoreError", "Error parsing ticket", e);
+                        Log.e("FirestoreError", "Parsing error", e);
                     }
                 }
-                if (adapter != null) {
-                    adapter.setFilteredList(new ArrayList<>(ticketList));
-                }
-            } else {
-                Log.e("FirestoreError", "Error fetching tickets", task.getException());
+                sortTicketsByDate();
+                if (adapter != null) adapter.setFilteredList(new ArrayList<>(ticketList));
             }
         });
     }
 
+    private void sortTicketsByDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        Collections.sort(ticketList, (t1, t2) -> {
+            try {
+                Date d1 = sdf.parse(t1.getEventDate());
+                Date d2 = sdf.parse(t2.getEventDate());
+                return d1.compareTo(d2);
+            } catch (Exception e) { return 0; }
+        });
+    }
+
     private void setupAdapter() {
-        // עדכון הבנאי כך שיעביר false (אנחנו לא במצב פרופיל, לא רוצים כפתורי עריכה/מחיקה בפיד)
         adapter = new TicketAdapter(ticketList, false, new TicketAdapter.OnTicketClickListener() {
             @Override
             public void onTicketClick(Ticket ticket) {
                 TicketDetailsFragment detailsFragment = new TicketDetailsFragment();
                 Bundle args = new Bundle();
 
-                // וידוא שימוש ב-Getters המדויקים מהמודל שלך
+                // התיקון כאן: חובה להעביר את ה-ID כדי שספירת הצפיות תעבוד!
+                args.putString("ticketId", ticket.getTicketId());
+
                 args.putString("eventName", ticket.getEventName());
-                args.putDouble("askingPrice", ticket.getAskingPrice()); // המודל מחזיר double
+                args.putDouble("askingPrice", ticket.getAskingPrice());
+                args.putDouble("originalPrice", ticket.getOriginalPrice());
+                args.putInt("quantity", ticket.getQuantity());
                 args.putString("location", ticket.getLocation());
+                args.putString("exactAddress", ticket.getExactAddress());
                 args.putString("sellerId", ticket.getSellerId());
                 args.putString("ticketImage", ticket.getTicketImage());
-                args.putString("eventDate", ticket.getEventDate()); // הוספת תאריך
-                args.putString("eventTime", ticket.getEventTime()); // הוספת שעה
+                args.putString("eventDate", ticket.getEventDate());
+                args.putString("eventTime", ticket.getEventTime());
+                args.putString("category", ticket.getCategory());
+                args.putBoolean("isExpired", false);
 
                 detailsFragment.setArguments(args);
-
                 getParentFragmentManager().beginTransaction()
                         .replace(R.id.main_container, detailsFragment)
-                        .addToBackStack(null)
-                        .commit();
+                        .addToBackStack(null).commit();
             }
-
-            @Override
-            public void onEditClick(Ticket ticket) {
-                // לא נדרש בפיד הכללי
-            }
-
-            @Override
-            public void onDeleteClick(Ticket ticket) {
-                // לא נדרש בפיד הכללי
-            }
+            @Override public void onEditClick(Ticket ticket) {}
+            @Override public void onDeleteClick(Ticket ticket) {}
+            @Override public void onSoldClick(Ticket ticket) {}
         });
         rvTicketList.setAdapter(adapter);
     }
@@ -140,14 +164,11 @@ public class FeedFragment extends Fragment {
         if (adapter == null) return;
         List<Ticket> filteredList = new ArrayList<>();
         for (Ticket ticket : ticketList) {
-            // בדיקת בטיחות שהשדות לא null
-            String name = ticket.getEventName() != null ? ticket.getEventName().toLowerCase() : "";
-            String loc = ticket.getLocation() != null ? ticket.getLocation().toLowerCase() : "";
-            String cat = ticket.getCategory() != null ? ticket.getCategory() : "";
-
+            String name = (ticket.getEventName() != null) ? ticket.getEventName().toLowerCase() : "";
+            String loc = (ticket.getLocation() != null) ? ticket.getLocation().toLowerCase() : "";
+            String cat = (ticket.getCategory() != null) ? ticket.getCategory() : "";
             boolean matchesSearch = name.contains(text.toLowerCase()) || loc.contains(text.toLowerCase());
-            boolean matchesCategory = currentCategory.equals("All") || cat.equalsIgnoreCase(currentCategory);
-
+            boolean matchesCategory = currentCategory.equals("הכל") || cat.equalsIgnoreCase(currentCategory);
             if (matchesSearch && matchesCategory) filteredList.add(ticket);
         }
         adapter.setFilteredList(filteredList);
@@ -158,10 +179,10 @@ public class FeedFragment extends Fragment {
             currentCategory = ((Button) v).getText().toString();
             filterList(searchView.getQuery().toString());
         };
-        // וודא שה-IDs האלו קיימים ב-fragment_feed.xml שלך
-        if (view.findViewById(R.id.btnCatAll) != null) view.findViewById(R.id.btnCatAll).setOnClickListener(listener);
-        if (view.findViewById(R.id.btnCatConcert) != null) view.findViewById(R.id.btnCatConcert).setOnClickListener(listener);
-        if (view.findViewById(R.id.btnCatSport) != null) view.findViewById(R.id.btnCatSport).setOnClickListener(listener);
-        if (view.findViewById(R.id.btnCatOther) != null) view.findViewById(R.id.btnCatOther).setOnClickListener(listener);
+        int[] ids = {R.id.btnCatAll, R.id.btnCatConcert, R.id.btnCatSport, R.id.btnCatCinema, R.id.btnCatParties, R.id.btnCatOther};
+        for (int id : ids) {
+            View btn = view.findViewById(id);
+            if (btn != null) btn.setOnClickListener(listener);
+        }
     }
 }

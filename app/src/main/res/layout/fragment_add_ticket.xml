@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -22,24 +21,59 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="שלב 1: אימות תעודת זהות"
-                android:textSize="22sp"
+                android:text="שלב 1: אימות זהות"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
-            <ImageView
-                android:id="@+id/ivIDCard"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#E0E0E0"
-                android:scaleType="centerInside"
-                android:src="@android:drawable/ic_menu_camera" />
-            <Button
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="כדי לשמור על בטיחות הקהילה, עליך לצלם תעודה מזהה"
+                android:textSize="14sp"
+                android:textColor="#757575"
+                android:layout_marginBottom="24dp"
+                android:textDirection="rtl"/>
+            <FrameLayout
                 android:id="@+id/btnVerifyID"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="220dp"
+                android:background="@drawable/bg_upload_placeholder">
+                <ImageView
+                    android:id="@+id/ivIDCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+                <LinearLayout
+                    android:id="@+id/layoutIDPrompt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_camera"
+                        app:tint="#673AB7" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="לחץ לצילום תעודת זהות"
+                        android:textColor="#673AB7"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:visibility="gone"
                 android:text="צילום תעודת זהות"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="#009688"/>
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:backgroundTint="#673AB7"/>
         </LinearLayout>
 
         <LinearLayout
@@ -51,24 +85,43 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="שלב 2: צילום סלפי"
-                android:textSize="22sp"
+                android:text="שלב 2: אימות פנים"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
-            <ImageView
-                android:id="@+id/ivSelfie"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+            <FrameLayout
+                android:id="@+id/btnVerifySelfie"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_gravity="center"
-                android:background="#E0E0E0"
-                android:src="@android:drawable/ic_menu_camera" />
-            <Button
-                android:id="@+id/btnVerifySelfie"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="אימות פנים"
-                android:layout_marginTop="24dp"
-                android:backgroundTint="#6200EE"/>
+                android:background="@drawable/bg_upload_placeholder">
+                <ImageView
+                    android:id="@+id/ivSelfie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+                <LinearLayout
+                    android:id="@+id/layoutSelfiePrompt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_camera"
+                        app:tint="#673AB7" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="לחץ לצילום סלפי"
+                        android:textColor="#673AB7"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -77,34 +130,66 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/ivTicketImage"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="פרטי הכרטיס"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="24dp"/>
+            <FrameLayout
+                android:id="@+id/frameUploadTicket"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:background="#E0E0E0"
-                android:scaleType="centerCrop"
-                android:src="@android:drawable/ic_menu_gallery"
-                android:layout_marginBottom="16dp"/>
+                android:layout_height="200dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_upload_placeholder">
+                <ImageView
+                    android:id="@+id/ivTicketImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+                <LinearLayout
+                    android:id="@+id/layoutUploadPrompt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        app:tint="#673AB7" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="לחץ להעלאת תמונת הכרטיס"
+                        android:textColor="#673AB7"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="שם האירוע"
-                android:layout_marginBottom="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEventName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textDirection="rtl"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="תאריך האירוע"
-                android:layout_marginBottom="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEventDate"
                     android:layout_width="match_parent"
@@ -118,8 +203,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="שעת האירוע"
-                android:layout_marginBottom="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEventTime"
                     android:layout_width="match_parent"
@@ -133,69 +218,97 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="מחיר מבוקש"
-                android:layout_marginBottom="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPrice"
                     android:inputType="numberDecimal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textDirection="rtl"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="מחיר מקורי"
-                android:layout_marginBottom="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etOriginalPrice"
                     android:inputType="numberDecimal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textDirection="rtl"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="מיקום (בחר עיר)"
-                android:layout_marginBottom="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                android:hint="כמות כרטיסים"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etQuantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="1"
+                    android:textDirection="rtl"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="יישוב"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_marginBottom="12dp">
                 <AutoCompleteTextView
                     android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:completionThreshold="1"
-                    android:padding="16dp"/>
+                    android:padding="16dp"
+                    android:textDirection="rtl"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="כתובת (למשל: היכל מנורה, בלומפילד)"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etExactAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textDirection="rtl"
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="קטגוריה"
-                android:layout_marginBottom="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_marginBottom="24dp">
                 <AutoCompleteTextView
                     android:id="@+id/spCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:focusable="false"
-                    android:clickable="true"
-                    android:padding="16dp"/>
+                    android:padding="16dp"
+                    android:textDirection="rtl"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btnSaveTicket"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="פרסם כרטיס"
-                android:layout_marginTop="8dp"
-                android:padding="12dp"
-                android:backgroundTint="#009688"/>
+                android:layout_height="60dp"
+                android:text="פרסם כרטיס למכירה"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:backgroundTint="#673AB7"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

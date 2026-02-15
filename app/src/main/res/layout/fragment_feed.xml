@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Tickets for Sale"
+        android:text="כרטיסים למכירה"
         android:textColor="@android:color/black"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -25,10 +25,11 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="24dp"
-        android:src="@android:drawable/ic_menu_myplaces"
-        app:layout_constraintBottom_toBottomOf="@+id/tvFeedTitle"
+        android:src="@drawable/ic_profile"
+        app:tint="#673AB7"
+        app:layout_constraintBottom_toBottomOf="@id/tvFeedTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvFeedTitle" />
+        app:layout_constraintTop_toTopOf="@id/tvFeedTitle" />
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
@@ -37,8 +38,9 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:background="@android:drawable/editbox_background"
+        android:textDirection="rtl"
         app:iconifiedByDefault="false"
-        app:queryHint="Search artist or location..."
+        app:queryHint="חפש אמן או מיקום..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFeedTitle" />
@@ -50,6 +52,7 @@
         android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp"
         android:scrollbars="none"
+        android:layoutDirection="rtl"
         app:layout_constraintTop_toBottomOf="@+id/searchView">
 
         <LinearLayout
@@ -57,36 +60,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnCatAll"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="All"
-                android:textSize="12sp"
-                android:layout_marginEnd="8dp"/>
+            <Button android:id="@+id/btnCatAll" android:layout_width="wrap_content" android:layout_height="40dp" android:text="הכל" android:textSize="12sp" android:layout_marginEnd="8dp" android:backgroundTint="#673AB7"/>
+            <Button android:id="@+id/btnCatConcert" android:layout_width="wrap_content" android:layout_height="40dp" android:text="הופעות" android:textSize="12sp" android:layout_marginEnd="8dp" android:backgroundTint="#673AB7"/>
+            <Button android:id="@+id/btnCatSport" android:layout_width="wrap_content" android:layout_height="40dp" android:text="ספורט" android:textSize="12sp" android:layout_marginEnd="8dp" android:backgroundTint="#673AB7"/>
+            <Button android:id="@+id/btnCatCinema" android:layout_width="wrap_content" android:layout_height="40dp" android:text="קולנוע" android:textSize="12sp" android:layout_marginEnd="8dp" android:backgroundTint="#673AB7"/>
+            <Button android:id="@+id/btnCatParties" android:layout_width="wrap_content" android:layout_height="40dp" android:text="מסיבות" android:textSize="12sp" android:layout_marginEnd="8dp" android:backgroundTint="#673AB7"/>
+            <Button android:id="@+id/btnCatOther" android:layout_width="wrap_content" android:layout_height="40dp" android:text="אחר" android:textSize="12sp" android:backgroundTint="#673AB7"/>
 
-            <Button
-                android:id="@+id/btnCatConcert"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Concert"
-                android:textSize="12sp"
-                android:layout_marginEnd="8dp"/>
-
-            <Button
-                android:id="@+id/btnCatSport"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Sport"
-                android:textSize="12sp"
-                android:layout_marginEnd="8dp"/>
-
-            <Button
-                android:id="@+id/btnCatOther"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Other"
-                android:textSize="12sp"/>
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -107,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:backgroundTint="#6200EE"
+        android:backgroundTint="#673AB7"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

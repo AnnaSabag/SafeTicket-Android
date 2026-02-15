@@ -57,23 +57,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         // --- Validation Logic ---
         if (fullName.isEmpty()) {
-            etFullName.setError("Full name is required");
+            etFullName.setError("נדרש למלא שם מלא");
             return;
         }
         if (email.isEmpty()) {
-            etEmail.setError("Email is required");
+            etEmail.setError("נדרש למלא כתובת אימייל");
             return;
         }
         if (phone.isEmpty()) {
-            etPhone.setError("Phone number is required");
+            etPhone.setError("נדרש למלא מספר טלפון");
             return;
         }
         if (idNumber.length() < 9) {
-            etIDNumber.setError("ID Number must be 9 digits");
+            etIDNumber.setError("מספר תעודת הזהות צריכה להכיל 9 ספרות");
             return;
         }
         if (password.isEmpty() || password.length() < 6) {
-            etPassword.setError("Password must be at least 6 characters");
+            etPassword.setError("הסיסמא חייבת להכיל לפחות 6 תווים");
             return;
         }
 
@@ -100,8 +100,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                         saveUserToDatabase(newUser);
                     } else {
-                        String error = task.getException() != null ? task.getException().getMessage() : "Registration failed";
-                        Toast.makeText(RegisterActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
+                        String error = task.getException() != null ? task.getException().getMessage() : "ההתחברות נכשלה";
+                        Toast.makeText(RegisterActivity.this, "שגיאה: " + error, Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -111,15 +111,15 @@ public class RegisterActivity extends AppCompatActivity {
                 .set(user)
                 .addOnSuccessListener(aVoid -> showSuccessDialog())
                 .addOnFailureListener(e -> {
-                    Toast.makeText(RegisterActivity.this, "Database error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "שגיאה בבסיס נתונים: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Registration Successful")
-                .setMessage("You have successfully registered! Please login to verify your identity and start selling.")
-                .setPositiveButton("OK", (dialog, which) -> finish())
+                .setTitle("ההרשמה הצליחה!")
+                .setMessage("נרשמת בהצלחה למערכת! כעת ניתן להתחבר ולרכוש כרטיסים או למכור לאחר אימות נתונים")
+                .setPositiveButton("אישור", (dialog, which) -> finish())
                 .setCancelable(false)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();

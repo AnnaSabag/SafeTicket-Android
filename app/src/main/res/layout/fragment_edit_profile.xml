@@ -11,7 +11,7 @@
         android:id="@+id/tvEditTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Profile"
+        android:text="עריכת פרופיל"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -23,10 +23,11 @@
         android:id="@+id/tvEditSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Note: Changing profile details will require re-verification of your identity."
+        android:text="שימו לב: שינוי פרטי הפרופיל יצריך אימות מחדש של הזהות שלכם."
         android:textColor="#673AB7"
         android:textSize="14sp"
         android:textStyle="italic"
+        android:textDirection="rtl"
         app:layout_constraintTop_toBottomOf="@+id/tvEditTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +37,8 @@
         android:id="@+id/tilEditName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Full Name"
+        android:hint="שם מלא"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintTop_toBottomOf="@+id/tvEditSubtitle"
         android:layout_marginTop="24dp">
 
@@ -44,6 +46,7 @@
             android:id="@+id/etEditName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,7 +54,8 @@
         android:id="@+id/tilEditPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone Number"
+        android:hint="מספר טלפון"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@+id/tilEditName">
 
@@ -59,6 +63,7 @@
             android:id="@+id/etEditPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,7 +71,8 @@
         android:id="@+id/tilEditIDNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID Number (9 Digits)"
+        android:hint="מספר תעודת זהות (9 ספרות)"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@+id/tilEditPhone">
 
@@ -74,6 +80,7 @@
             android:id="@+id/etEditIDNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +88,7 @@
         android:id="@+id/btnSaveProfile"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Save &amp; Reset Verification"
+        android:text="שמור ואפס אימות זהות"
         android:textSize="18sp"
         android:layout_marginTop="32dp"
         android:backgroundTint="#673AB7"

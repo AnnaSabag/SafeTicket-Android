@@ -64,12 +64,12 @@ public class EditProfileFragment extends Fragment {
 
         // ולידציה בסיסית
         if (fullName.isEmpty() || phone.isEmpty() || idNumber.isEmpty()) {
-            Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "אנא מלא את כל השדות", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (idNumber.length() != 9) {
-            Toast.makeText(getContext(), "ID Number must be 9 digits", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "מספר תעודת הזהות חייבל הכיל 9 ספרות", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -94,7 +94,7 @@ public class EditProfileFragment extends Fragment {
         db.collection("users").document(currentUserId)
                 .update(updates)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getContext(), "Profile updated. Please re-verify your identity.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "הפרופיל עודכן ואינו מאומת יותר", Toast.LENGTH_LONG).show();
 
                     // שליחת הודעה לפרופיל להתעדכן
                     getParentFragmentManager().setFragmentResult("edit_profile_request", new Bundle());
@@ -102,6 +102,6 @@ public class EditProfileFragment extends Fragment {
                     // חזרה למסך הפרופיל
                     getParentFragmentManager().popBackStack();
                 })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error updating profile", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "שגיאה בעדכון הפרופיל", Toast.LENGTH_SHORT).show());
     }
 }

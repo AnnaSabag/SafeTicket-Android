@@ -11,7 +11,7 @@
         android:id="@+id/tvRegisterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Account"
+        android:text="יצירת חשבון"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -24,7 +24,7 @@
         android:id="@+id/tilFullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Full Name"
+        android:hint="שם מלא"
         app:layout_constraintTop_toBottomOf="@+id/tvRegisterTitle"
         android:layout_marginTop="16dp">
 
@@ -32,6 +32,7 @@
             android:id="@+id/etFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -39,7 +40,7 @@
         android:id="@+id/tilRegEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="אימייל"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@+id/tilFullName">
 
@@ -47,6 +48,7 @@
             android:id="@+id/etRegEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,7 +56,7 @@
         android:id="@+id/tilPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone Number"
+        android:hint="מספר טלפון"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@+id/tilRegEmail">
 
@@ -62,6 +64,7 @@
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +72,7 @@
         android:id="@+id/tilIDNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID Number (9 Digits)"
+        android:hint="מספר תעודת זהות (9 ספרות)"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@+id/tilPhone">
 
@@ -77,6 +80,7 @@
             android:id="@+id/etIDNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,7 +88,7 @@
         android:id="@+id/tilRegPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="סיסמה"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@+id/tilIDNumber">
 
@@ -92,6 +96,7 @@
             android:id="@+id/etRegPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textDirection="rtl"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,7 +104,7 @@
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Register"
+        android:text="הרשמה"
         android:textSize="18sp"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/tilRegPassword" />
@@ -108,7 +113,7 @@
         android:id="@+id/tvLoginLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already have an account? Login"
+        android:text="כבר יש לך חשבון? התחבר"
         android:textSize="16sp"
         android:textColor="@color/design_default_color_primary"
         android:layout_marginTop="16dp"

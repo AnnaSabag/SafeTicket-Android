@@ -59,13 +59,13 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Please enter a valid email address");
+            etEmail.setError("נא להזין כתובת אימייל תקינה");
             etEmail.requestFocus();
             return;
         }
 
         if (password.isEmpty() || password.length() < 6) {
-            etPassword.setError("Password must be at least 6 characters");
+            etPassword.setError("הסיסמה חייבת להכיל לפחות 6 תווים");
             etPassword.requestFocus();
             return;
         }
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Success! User is authenticated
-                        Toast.makeText(LoginActivity.this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "ברוכים השבים! ", Toast.LENGTH_SHORT).show();
 
                         // Navigate to MainActivity
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -83,8 +83,8 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                     } else {
                         // Fail - maybe wrong password or no internet
-                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Login failed";
-                        Toast.makeText(LoginActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "התחברות נכשלה";
+                        Toast.makeText(LoginActivity.this, "שגיאה: " + errorMessage, Toast.LENGTH_LONG).show();
                     }
                 });
     }
