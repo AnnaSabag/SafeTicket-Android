@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -21,9 +24,13 @@ public class FeedFragment extends Fragment {
 
     private RecyclerView rvTicketList;
     private TicketAdapter adapter;
-    private List<Ticket> ticketList; // Holds ALL tickets (Original source)
+    private List<Ticket> ticketList;
     private SearchView searchView;
-    private String currentCategory = "All"; // To keep track of filter
+    private Spinner spinnerLocation; // New
+
+    // Filter States
+    private String currentCategory = "All";
+    private String currentLocation = "All Areas"; // New
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +44,7 @@ public class FeedFragment extends Fragment {
         // Initialize Views
         rvTicketList = view.findViewById(R.id.rvTicketList);
         searchView = view.findViewById(R.id.searchView);
+        spinnerLocation = view.findViewById(R.id.spinnerLocation); // New
         rvTicketList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         createDummyData();
@@ -44,7 +52,10 @@ public class FeedFragment extends Fragment {
         // 1. Setup Adapter
         setupAdapter();
 
-        // 2. Setup Search Listener
+        // 2. Setup Location Spinner (New)
+        setupLocationSpinner();
+
+        // 3. Setup Search Listener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -53,15 +64,15 @@ public class FeedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filterList(newText); // Call filter every time text changes
+                filterList(newText);
                 return true;
             }
         });
 
-        // 3. Setup Category Buttons
+        // 4. Setup Category Buttons
         setupCategoryButtons(view);
 
-        // 4. Handle "Add Ticket" Result
+        // 5. Handle "Add Ticket" Result
         getParentFragmentManager().setFragmentResultListener("add_ticket_request", this, (requestKey, result) -> {
             String name = result.getString("name");
             String priceStr = result.getString("price");
@@ -81,20 +92,16 @@ public class FeedFragment extends Fragment {
                     System.currentTimeMillis(), priceValue, priceValue,
                     category, R.drawable.ic_launcher_background, "Me", "050-0000000"
             );
-
-            // Add to the ORIGINAL list
             ticketList.add(0, newTicket);
-            // Refresh the view
             filterList(searchView.getQuery().toString());
         });
 
-        // --- 5. NEW: Handle Edit/Delete Actions (from Details Screen) ---
+        // 6. Handle Edit/Delete
         getParentFragmentManager().setFragmentResultListener("ticket_action_request", this, (requestKey, result) -> {
             String action = result.getString("action");
             String ticketId = result.getString("ticketId");
 
             if ("delete".equals(action)) {
-                // Find and remove ticket by ID
                 for (int i = 0; i < ticketList.size(); i++) {
                     if (ticketList.get(i).getTicketId().equals(ticketId)) {
                         ticketList.remove(i);
@@ -102,7 +109,6 @@ public class FeedFragment extends Fragment {
                     }
                 }
             } else if ("update_price".equals(action)) {
-                // Find and update price by ID
                 double newPrice = result.getDouble("newPrice");
                 for (int i = 0; i < ticketList.size(); i++) {
                     if (ticketList.get(i).getTicketId().equals(ticketId)) {
@@ -111,11 +117,10 @@ public class FeedFragment extends Fragment {
                     }
                 }
             }
-            // Refresh the list to show changes
             filterList(searchView.getQuery().toString());
         });
 
-        // 6. Handle Profile Click
+        // 7. Profile & FAB
         view.findViewById(R.id.ivProfileButton).setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.main_container, new ProfileFragment())
@@ -123,7 +128,6 @@ public class FeedFragment extends Fragment {
                     .commit();
         });
 
-        // 7. Handle FAB
         view.findViewById(R.id.fabAddTicket).setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.main_container, new AddTicketFragment())
@@ -133,6 +137,25 @@ public class FeedFragment extends Fragment {
     }
 
     // --- Helper Methods ---
+
+    private void setupLocationSpinner() {
+        // Create list of locations
+        String[] locations = {"All Areas", "Tel Aviv", "Haifa", "Jerusalem", "Eilat", "North", "South"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, locations);
+        spinnerLocation.setAdapter(adapter);
+
+        spinnerLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentLocation = locations[position];
+                filterList(searchView.getQuery().toString()); // Trigger filter
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+    }
 
     private void setupAdapter() {
         adapter = new TicketAdapter(ticketList, ticket -> {
@@ -146,6 +169,11 @@ public class FeedFragment extends Fragment {
             args.putString(TicketDetailsFragment.ARG_SELLER, ticket.getSellerName());
             args.putString(TicketDetailsFragment.ARG_PHONE, ticket.getSellerPhone());
             args.putInt(TicketDetailsFragment.ARG_IMAGE, ticket.getEventImage());
+
+            // Dummy transparency data
+            args.putFloat(TicketDetailsFragment.ARG_RATING, 4.5f);
+            args.putBoolean(TicketDetailsFragment.ARG_VERIFIED, true);
+
             detailsFragment.setArguments(args);
 
             getParentFragmentManager().beginTransaction()
@@ -164,8 +192,8 @@ public class FeedFragment extends Fragment {
 
         View.OnClickListener categoryListener = v -> {
             Button clickedBtn = (Button) v;
-            currentCategory = clickedBtn.getText().toString(); // Update current category
-            filterList(searchView.getQuery().toString()); // Filter with current search text
+            currentCategory = clickedBtn.getText().toString();
+            filterList(searchView.getQuery().toString());
         };
 
         btnAll.setOnClickListener(categoryListener);
@@ -174,27 +202,27 @@ public class FeedFragment extends Fragment {
         btnOther.setOnClickListener(categoryListener);
     }
 
-    // The Filter Logic 🧠
+    // The Smart Filter Logic 🧠
     private void filterList(String text) {
         List<Ticket> filteredList = new ArrayList<>();
 
         for (Ticket ticket : ticketList) {
-            // Check 1: Does the name match the search text? (Case insensitive)
+            // 1. Check Search Text
             boolean matchesSearch = ticket.getEventName().toLowerCase().contains(text.toLowerCase()) ||
                     ticket.getLocation().toLowerCase().contains(text.toLowerCase());
 
-            // Check 2: Does the category match? (Or is "All" selected?)
+            // 2. Check Category
             boolean matchesCategory = currentCategory.equals("All") ||
                     ticket.getCategory().equalsIgnoreCase(currentCategory);
 
-            // Add only if BOTH match
-            if (matchesSearch && matchesCategory) {
+            // 3. Check Location (New)
+            boolean matchesLocation = currentLocation.equals("All Areas") ||
+                    ticket.getLocation().contains(currentLocation);
+
+            // ADD only if ALL conditions match
+            if (matchesSearch && matchesCategory && matchesLocation) {
                 filteredList.add(ticket);
             }
-        }
-
-        if (filteredList.isEmpty()) {
-            // Optional: Show a "No results found" Toast
         }
 
         adapter.setFilteredList(filteredList);
@@ -202,9 +230,11 @@ public class FeedFragment extends Fragment {
 
     private void createDummyData() {
         ticketList = new ArrayList<>();
-        ticketList.add(new Ticket("101", "s1", "Coldplay Live", "Park Hayarkon, TLV", "Israel", System.currentTimeMillis(), 450.0, 600.0, "Concert", R.drawable.img_coldplay, "David Cohen", "050-1234567"));
-        ticketList.add(new Ticket("102", "s2", "Football Match", "Bloomfield Stadium", "Israel", System.currentTimeMillis(), 120.0, 200.0, "Sport", R.drawable.img_football, "Yossi Levi", "052-9876543"));
-        ticketList.add(new Ticket("103", "s3", "Omer Adam", "Menora Mivtachim", "Israel", System.currentTimeMillis(), 300.0, 450.0, "Concert", R.drawable.img_omeradam, "Dana Ron", "054-5555555"));
-        ticketList.add(new Ticket("104", "s4", "Cinema City VIP", "Glilot", "Israel", System.currentTimeMillis(), 80.0, 150.0, "Other", R.drawable.img_cinema, "Roni Alon", "053-1112223"));
+        // Updated locations to match the filter options (Tel Aviv, Jerusalem, etc.)
+        ticketList.add(new Ticket("101", "s1", "Coldplay Live", "Park Hayarkon, Tel Aviv", "Israel", System.currentTimeMillis(), 450.0, 600.0, "Concert", R.drawable.img_coldplay, "David Cohen", "050-1234567"));
+        ticketList.add(new Ticket("102", "s2", "Football Match", "Bloomfield, Tel Aviv", "Israel", System.currentTimeMillis(), 120.0, 200.0, "Sport", R.drawable.img_football, "Yossi Levi", "052-9876543"));
+        ticketList.add(new Ticket("103", "s3", "Omer Adam", "Menora Mivtachim, Tel Aviv", "Israel", System.currentTimeMillis(), 300.0, 450.0, "Concert", R.drawable.img_omeradam, "Dana Ron", "054-5555555"));
+        ticketList.add(new Ticket("104", "s4", "Cinema City VIP", "Glilot, North", "Israel", System.currentTimeMillis(), 80.0, 150.0, "Other", R.drawable.img_cinema, "Roni Alon", "053-1112223"));
+        ticketList.add(new Ticket("105", "s5", "Teddy Stadium", "Teddy, Jerusalem", "Israel", System.currentTimeMillis(), 100.0, 100.0, "Sport", R.drawable.ic_launcher_background, "Moshe", "050-1111111"));
     }
 }
