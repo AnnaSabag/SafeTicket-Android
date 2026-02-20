@@ -3,12 +3,9 @@ package com.safeticket.model;
 public class User {
     private String userId, firstName, lastName, idNumber, phoneNumber, email;
     private boolean isVerified;
-    private double rating;
     private String profileImageBase64, idCardBase64, selfieImageBase64;
-
-    public User() {} // Required for Firebase
-
-    public User(String userId, String firstName, String lastName, String idNumber, String phoneNumber, String email) {
+    public User() {} // Empty constructor, required for Firebase
+    public User(String userId, String firstName, String lastName, String idNumber, String phoneNumber, String email) { // Constructor
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -16,9 +13,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.isVerified = false;
-        this.rating = 0.0;
     }
-
     // Getters & Setters
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
@@ -34,8 +29,6 @@ public class User {
     public void setEmail(String email) { this.email = email; }
     public boolean isVerified() { return isVerified; }
     public void setVerified(boolean verified) { isVerified = verified; }
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
     public String getProfileImageBase64() { return profileImageBase64; }
     public void setProfileImageBase64(String profileImageBase64) { this.profileImageBase64 = profileImageBase64; }
     public String getIdCardBase64() { return idCardBase64; }

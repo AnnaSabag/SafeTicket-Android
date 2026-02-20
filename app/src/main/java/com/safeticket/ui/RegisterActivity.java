@@ -15,9 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.safeticket.R;
 import com.safeticket.model.User;
-
 public class RegisterActivity extends AppCompatActivity {
-
     private TextInputEditText etFullName, etEmail, etPhone, etPassword, etIDNumber;
     private Button btnRegister;
     private TextView tvLoginLink;
@@ -28,34 +26,34 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_register); // Set the layout for the activity
 
-        // Initialize Firebase
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth
+        db = FirebaseFirestore.getInstance(); // Initialize FirebaseFirestore
 
         // Initialize Views
         etFullName = findViewById(R.id.etFullName);
         etEmail = findViewById(R.id.etRegEmail);
         etPhone = findViewById(R.id.etPhone);
-        etIDNumber = findViewById(R.id.etIDNumber); // New ID field
+        etIDNumber = findViewById(R.id.etIDNumber);
         etPassword = findViewById(R.id.etRegPassword);
         btnRegister = findViewById(R.id.btnRegister);
         tvLoginLink = findViewById(R.id.tvLoginLink);
 
-        btnRegister.setOnClickListener(v -> registerUser());
+        btnRegister.setOnClickListener(v -> registerUser()); // Register button click listener - will call registerUser()
 
-        tvLoginLink.setOnClickListener(v -> finish());
+        tvLoginLink.setOnClickListener(v -> finish()); // Login link click listener - will finish the activity
     }
 
-    private void registerUser() {
+    private void registerUser() { // Method to handle user registration
+        // Trim to remove leading/trailing spaces, get the text from the EditText
         String fullName = etFullName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
         String idNumber = etIDNumber.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // --- Validation Logic ---
+        //Validation Logic
         if (fullName.isEmpty()) {
             etFullName.setError("נדרש למלא שם מלא");
             return;
@@ -77,18 +75,17 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // --- Firebase Registration ---
+        //Firebase Registration
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        String userId = mAuth.getCurrentUser().getUid();
-
+                    if (task.isSuccessful()) { // If registration is successful
+                        String userId = mAuth.getCurrentUser().getUid(); // Create unique ID in the DB for the user
                         // Split full name logic
                         String firstName = fullName;
                         String lastName = "";
-                        if (fullName.contains(" ")) {
-                            firstName = fullName.substring(0, fullName.indexOf(" "));
-                            lastName = fullName.substring(fullName.indexOf(" ") + 1);
+                        if (fullName.contains(" ")) { // If there is a space in the name
+                            firstName = fullName.substring(0, fullName.indexOf(" ")); // Extract first name
+                            lastName = fullName.substring(fullName.indexOf(" ") + 1); // Extract last name
                         }
 
                         // Create User object using the updated constructor from your User.java
@@ -96,32 +93,32 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // Set additional default fields
                         newUser.setVerified(false);
-                        newUser.setRating(0.0);
 
-                        saveUserToDatabase(newUser);
-                    } else {
-                        String error = task.getException() != null ? task.getException().getMessage() : "ההתחברות נכשלה";
-                        Toast.makeText(RegisterActivity.this, "שגיאה: " + error, Toast.LENGTH_LONG).show();
+                        saveUserToDatabase(newUser); // Save the user to the database
+
+                    } else { // If registration fails
+                        String error = task.getException() != null ? task.getException().getMessage() : "ההתחברות נכשלה"; // Get the error message
+                        Toast.makeText(RegisterActivity.this, "שגיאה: " + error, Toast.LENGTH_LONG).show(); // Display the error message
                     }
                 });
     }
 
-    private void saveUserToDatabase(User user) {
-        db.collection("users").document(user.getUserId())
-                .set(user)
-                .addOnSuccessListener(aVoid -> showSuccessDialog())
-                .addOnFailureListener(e -> {
+    private void saveUserToDatabase(User user) { // Save user to the database
+        db.collection("users").document(user.getUserId()) // Save the user to the "users" collection with the user ID as the document ID
+                .set(user) // Set the user object as the document
+                .addOnSuccessListener(aVoid -> showSuccessDialog()) // If successful, show success dialog
+                .addOnFailureListener(e -> { // If failed, show error message
                     Toast.makeText(RegisterActivity.this, "שגיאה בבסיס נתונים: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
     private void showSuccessDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("ההרשמה הצליחה!")
-                .setMessage("נרשמת בהצלחה למערכת! כעת ניתן להתחבר ולרכוש כרטיסים או למכור לאחר אימות נתונים")
-                .setPositiveButton("אישור", (dialog, which) -> finish())
-                .setCancelable(false)
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .show();
+        new AlertDialog.Builder(this) // Show success dialog
+                .setTitle("ההרשמה הצליחה!") // Title of success
+                .setMessage("נרשמת בהצלחה למערכת! כעת ניתן להתחבר ולרכוש כרטיסים או למכור לאחר אימות נתונים") // Message of success
+                .setPositiveButton("אישור", (dialog, which) -> finish()) // Button to close the activity
+                .setCancelable(false) // Disable canceling the dialog
+                .setIcon(android.R.drawable.ic_dialog_info) // !
+                .show(); // Show the dialog
     }
 }

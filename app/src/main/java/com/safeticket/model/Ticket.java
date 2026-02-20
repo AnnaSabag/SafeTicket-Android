@@ -1,8 +1,9 @@
 package com.safeticket.model;
 
-import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.IgnoreExtraProperties;
-import com.google.firebase.firestore.PropertyName;
+import com.google.firebase.firestore.DocumentId; // Annotation to specify the document ID
+import com.google.firebase.firestore.IgnoreExtraProperties; // If there is no data of one of the fields, it will be ignored
+import com.google.firebase.firestore.PropertyName; // Annotation to specify the property name
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,32 +15,28 @@ public class Ticket {
     private String eventName;
     private String category;
     private String location;
-    private String exactAddress;
-    private String country;
+    private String exactAddress; // Exact location
     private String eventDate;
     private String eventTime;
     private double originalPrice;
     private double askingPrice;
-    private int quantity;
-    private String ticketImage;
+    private int quantity; // Number of tickets
+    private String ticketImage; // Base64 image
     private String sellerName;
     private String sellerPhone;
-    private boolean isActive;
-    private boolean isSold;
-    private int viewCount; // מונה צפיות
-    private List<String> viewedBy = new ArrayList<>(); // רשימת מזהי צופים למניעת כפילויות
-
-    public Ticket() {}
-
-    public Ticket(String ticketId, String sellerId, String eventName, String location, String exactAddress, String country,
+    private boolean isActive; // If the ticket is active or not
+    private boolean isSold; // If the ticket is sold or not
+    private int viewCount; // Number of times the ticket has been viewed
+    private List<String> viewedBy = new ArrayList<>(); // List of users who viewed the ticket
+    public Ticket() {} // Empty constructor, required for Firebase
+    public Ticket(String ticketId, String sellerId, String eventName, String location, String exactAddress,
                   String eventDate, double originalPrice, double askingPrice, int quantity, String category,
-                  String ticketImage, String sellerName, String sellerPhone) {
+                  String ticketImage, String sellerName, String sellerPhone) { // Constructor
         this.ticketId = ticketId;
         this.sellerId = sellerId;
         this.eventName = eventName;
         this.location = location;
         this.exactAddress = exactAddress;
-        this.country = country;
         this.eventDate = eventDate;
         this.originalPrice = originalPrice;
         this.askingPrice = askingPrice;
@@ -48,11 +45,10 @@ public class Ticket {
         this.ticketImage = ticketImage;
         this.sellerName = sellerName;
         this.sellerPhone = sellerPhone;
-        this.isActive = true;
-        this.isSold = false;
-        this.viewCount = 0;
+        this.isActive = true; // By default, the ticket is active
+        this.isSold = false; // By default, the ticket is not sold
+        this.viewCount = 0; // By default, the ticket has not been viewed
     }
-
     // Getters & Setters
     public String getTicketId() { return ticketId; }
     public void setTicketId(String ticketId) { this.ticketId = ticketId; }
@@ -84,16 +80,17 @@ public class Ticket {
     public void setSellerPhone(String sellerPhone) { this.sellerPhone = sellerPhone; }
     public int getViewCount() { return viewCount; }
     public void setViewCount(int viewCount) { this.viewCount = viewCount; }
-    public List<String> getViewedBy() { return viewedBy != null ? viewedBy : new ArrayList<>(); }
+    public List<String> getViewedBy() { // Getter for viewedBy
+        return viewedBy != null ? viewedBy : new ArrayList<>(); // Return an empty list if viewedBy is null
+    }
     public void setViewedBy(List<String> viewedBy) { this.viewedBy = viewedBy; }
-
-    @PropertyName("isSold")
+    @PropertyName("isSold") // Annotation to specify the property name
     public boolean isSold() { return isSold; }
-    @PropertyName("isSold")
+    @PropertyName("isSold") // Annotation to specify the property name
     public void setSold(boolean sold) { isSold = sold; }
 
-    @PropertyName("isActive")
+    @PropertyName("isActive") // Annotation to specify the property name
     public boolean getIsActive() { return isActive; }
-    @PropertyName("isActive")
+    @PropertyName("isActive") // Annotation to specify the property name
     public void setIsActive(boolean active) { isActive = active; }
 }
