@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraph"
+    app:startDestination="@id/feedFragment">
+
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.safeticket.ui.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" >
+        <action
+            android:id="@+id/action_feedFragment_to_addTicketFragment"
+            app:destination="@id/addTicketFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_ticketDetailsFragment"
+            app:destination="@id/ticketDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTicketFragment"
+        android:name="com.safeticket.ui.AddTicketFragment"
+        android:label="AddTicketFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.safeticket.ui.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addTicketFragment"
+            app:destination="@id/addTicketFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_ticketDetailsFragment"
+            app:destination="@id/ticketDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.safeticket.ui.EditProfileFragment"
+        android:label="EditProfileFragment" />
+    <fragment
+        android:id="@+id/ticketDetailsFragment"
+        android:name="com.safeticket.ui.TicketDetailsFragment"
+        android:label="TicketDetailsFragment" />
+</navigation>

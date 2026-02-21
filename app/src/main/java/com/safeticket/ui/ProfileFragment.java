@@ -37,6 +37,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.navigation.fragment.NavHostFragment;
+
+
 public class ProfileFragment extends Fragment {
 
     private ImageView ivProfileImage;
@@ -73,11 +76,9 @@ public class ProfileFragment extends Fragment {
         fetchSoldStatistics(); // משיכת סטטיסטיקה
 
         ivProfileImage.setOnClickListener(v -> galleryLauncher.launch(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)));
-        view.findViewById(R.id.btnEditProfile).setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_container, new EditProfileFragment())
-                    .addToBackStack(null).commit();
-        });
+        view.findViewById(R.id.btnEditProfile).setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_profileFragment_to_editProfileFragment));
     }
 
     private void initViews(View view) {
@@ -128,20 +129,16 @@ public class ProfileFragment extends Fragment {
                 args.putString("category", ticket.getCategory());
                 args.putBoolean("isExpired", false);
 
-                detailsFragment.setArguments(args);
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.main_container, detailsFragment)
-                        .addToBackStack(null).commit();
+                NavHostFragment.findNavController(ProfileFragment.this)
+                        .navigate(R.id.action_profileFragment_to_ticketDetailsFragment, args);
             }
             @Override
             public void onEditClick(Ticket ticket) {
                 AddTicketFragment editFragment = new AddTicketFragment();
                 Bundle b = new Bundle();
                 b.putString("editTicketId", ticket.getTicketId());
-                editFragment.setArguments(b);
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.main_container, editFragment)
-                        .addToBackStack(null).commit();
+                NavHostFragment.findNavController(ProfileFragment.this)
+                        .navigate(R.id.action_profileFragment_to_addTicketFragment, b);
             }
             @Override
             public void onDeleteClick(Ticket ticket) { confirmDelete(ticket); }

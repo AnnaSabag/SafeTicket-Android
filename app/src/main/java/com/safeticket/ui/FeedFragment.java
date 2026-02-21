@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.navigation.fragment.NavHostFragment;
+
+
 public class FeedFragment extends Fragment {
 
     private RecyclerView rvTicketList;
@@ -67,18 +70,15 @@ public class FeedFragment extends Fragment {
         setupCategoryButtons(view);
 
         view.findViewById(R.id.fabAddTicket).setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_container, new AddTicketFragment())
-                    .addToBackStack(null)
-                    .commit();
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_feedFragment_to_addTicketFragment);
         });
 
         view.findViewById(R.id.ivProfileButton).setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_container, new ProfileFragment())
-                    .addToBackStack(null)
-                    .commit();
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_feedFragment_to_profileFragment);
         });
+
     }
 
     private void fetchTicketsFromFirestore() {
@@ -148,10 +148,8 @@ public class FeedFragment extends Fragment {
                 args.putString("category", ticket.getCategory());
                 args.putBoolean("isExpired", false);
 
-                detailsFragment.setArguments(args);
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.main_container, detailsFragment)
-                        .addToBackStack(null).commit();
+                NavHostFragment.findNavController(FeedFragment.this)
+                        .navigate(R.id.action_feedFragment_to_ticketDetailsFragment, args);
             }
             @Override public void onEditClick(Ticket ticket) {}
             @Override public void onDeleteClick(Ticket ticket) {}
